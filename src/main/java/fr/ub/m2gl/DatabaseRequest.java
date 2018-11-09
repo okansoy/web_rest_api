@@ -25,15 +25,15 @@ class DatabaseRequest {
             String jsonString = mapper.writeValueAsString(user);
             Document doc = Document.parse(jsonString);
             collection.insertOne(doc);
-            return "User " + user.getFirstname() + " " + user.getLastname() + " added successfully.";
+            return "\"User " + user.getFirstname() + " " + user.getLastname() + " added successfully.\"";
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "Adding new user failed";
+        return "\"Adding new user failed\"";
     }
 
     String getAllUsers() {
-        StringBuilder str = new StringBuilder("All users :\n");
+        StringBuilder str = new StringBuilder();
         FindIterable<Document> cursor = collection.find();
         for (Document d : cursor)
             str.append(d.toJson()).append("\n");
@@ -42,13 +42,13 @@ class DatabaseRequest {
 
     String getUser(String id) {
         Document doc = collection.find(eq("id", id)).first();
-        return doc != null ? doc.toJson() : "User not found";
+        return doc != null ? doc.toJson() : "\"User not found\"";
     }
 
     String deleteUser(String id) {
         if (collection.deleteOne(eq("id", id)).getDeletedCount() == 1)
-            return "User with {\"id\" = " + id + "} deleted";
-        return "User not found";
+            return "\"User with id = " + id + "} deleted\"";
+        return "\"User not found\"";
     }
 
     String updateUser(User user) {
@@ -57,11 +57,11 @@ class DatabaseRequest {
             String jsonString = mapper.writeValueAsString(user);
             Document doc = Document.parse(jsonString);
             collection.updateOne(eq("id", user.getId()), new Document("$set", doc));
-            return "User " + user.getFirstname() + " updated successfully";
+            return "\"User " + user.getFirstname() + " updated successfully\"";
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "Updating failed";
+        return "\"Updating failed\"";
     }
 
 }
